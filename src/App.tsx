@@ -14,6 +14,7 @@ import ElectionDetails from "./pages/ElectionDetails";
 import Vote from "./pages/Vote";
 import Results from "./pages/Results";
 import NotFound from "./pages/NotFound";
+import AdminPanel from "./pages/AdminPanel";
 
 // Contexts
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -36,6 +37,21 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
 
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
+  }
+
+  return <>{children}</>;
+};
+
+// Admin route component
+const AdminRoute = ({ children }: { children: ReactNode }) => {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user || user.role !== 'admin') {
+    return <Navigate to="/dashboard" />;
   }
 
   return <>{children}</>;
@@ -68,6 +84,13 @@ const AppRoutes = () => {
         <ProtectedRoute>
           <Results />
         </ProtectedRoute>
+      } />
+
+      {/* Admin Routes */}
+      <Route path="/admin/*" element={
+        <AdminRoute>
+          <AdminPanel />
+        </AdminRoute>
       } />
       
       {/* 404 Route */}

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PlusCircle, CalendarCheck, Clock, CheckCircle, User, Vote } from 'lucide-react';
+import { PlusCircle, CalendarCheck, Clock, CheckCircle, User, Vote, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import Layout from '@/components/Layout';
@@ -31,12 +31,20 @@ const Dashboard: React.FC = () => {
     <Layout>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold font-heading">Dashboard</h1>
-        {user?.role === 'admin' && (
-          <Button onClick={() => navigate('/elections/create')} className="glass-button">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Create Election
-          </Button>
-        )}
+        <div className="flex gap-2">
+          {user?.role === 'admin' && (
+            <>
+              <Button onClick={() => navigate('/elections/create')} className="glass-button">
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Create Election
+              </Button>
+              <Button onClick={() => navigate('/admin/dashboard')} variant="outline" className="glass-button bg-white/20 text-primary">
+                <Settings className="mr-2 h-4 w-4" />
+                Admin Panel
+              </Button>
+            </>
+          )}
+        </div>
       </div>
       
       {/* Stats */}
@@ -50,7 +58,7 @@ const Dashboard: React.FC = () => {
       {activeElections.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {activeElections.map((election) => (
-            <Card key={election.id} className="glass-card">
+            <Card key={election.id} className="glass-card hover:shadow-lg transition-all duration-200">
               <CardHeader>
                 <Badge className="w-fit mb-2" variant="outline">
                   Active
@@ -107,7 +115,7 @@ const Dashboard: React.FC = () => {
       {upcomingElections.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {upcomingElections.map((election) => (
-            <Card key={election.id} className="glass-card">
+            <Card key={election.id} className="glass-card hover:shadow-lg transition-all duration-200">
               <CardHeader>
                 <Badge className="w-fit mb-2" variant="outline">
                   Upcoming
@@ -188,7 +196,7 @@ const Dashboard: React.FC = () => {
       {completedElections.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {completedElections.slice(0, 3).map((election) => (
-            <Card key={election.id} className="glass-card">
+            <Card key={election.id} className="glass-card hover:shadow-lg transition-all duration-200">
               <CardHeader>
                 <Badge className="w-fit mb-2" variant="secondary">
                   Completed
