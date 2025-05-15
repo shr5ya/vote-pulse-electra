@@ -66,6 +66,13 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Custom colors from provided hex values
+				electra: {
+					light: '#F2F2F2',    // light background/text
+					cream: '#EAE4D5',    // secondary background
+					taupe: '#B6B09F',    // accent color
+					dark: '#000000'      // dark text/primary
 				}
 			},
 			borderRadius: {
@@ -111,6 +118,14 @@ export default {
 					'60%': { content: '"3"' },
 					'80%': { content: '"4"' },
 					'100%': { content: '"5"' }
+				},
+				'pulse-soft': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.7' }
+				},
+				'scale-in-out': {
+					'0%, 100%': { transform: 'scale(1)' },
+					'50%': { transform: 'scale(1.05)' }
 				}
 			},
 			animation: {
@@ -118,11 +133,16 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.3s ease-out',
 				'slide-in-right': 'slide-in-right 0.3s ease-out',
-				'count-up': 'count-up 2s linear'
+				'count-up': 'count-up 2s linear',
+				'pulse-soft': 'pulse-soft 3s ease-in-out infinite',
+				'scale-in-out': 'scale-in-out 3s ease-in-out infinite'
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
 				'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+				'gradient-subtle': 'linear-gradient(to right bottom, #F2F2F2, #EAE4D5)',
+				'gradient-accent': 'linear-gradient(135deg, #EAE4D5, #B6B09F)',
+				'gradient-dark': 'linear-gradient(135deg, #333333, #000000)',
 			}
 		}
 	},

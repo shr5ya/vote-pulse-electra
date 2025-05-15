@@ -24,7 +24,13 @@ import {
 } from '@/components/ui/form';
 import { useAuth } from '@/contexts/AuthContext';
 import Layout from '@/components/Layout';
-import { Loader2 } from 'lucide-react';
+import { 
+  Loader2, 
+  User, 
+  AtSign, 
+  Lock, 
+  UserPlus 
+} from 'lucide-react';
 
 // Define the form schema
 const registerSchema = z.object({
@@ -71,22 +77,28 @@ const Register: React.FC = () => {
   return (
     <Layout>
       <div className="flex items-center justify-center py-12">
-        <Card className="w-full max-w-md glass-card">
+        <Card className="w-full max-w-md glass-card animate-fade-in">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-heading">Create an Account</CardTitle>
+            <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-primary/20 p-2 backdrop-blur-sm flex items-center justify-center">
+              <UserPlus className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-3xl font-heading">Create an Account</CardTitle>
             <CardDescription>
               Join Electra and start participating in elections
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                 <FormField
                   control={form.control}
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name</FormLabel>
+                      <FormLabel className="flex items-center">
+                        <User className="mr-1 h-4 w-4 text-muted-foreground" />
+                        Full Name
+                      </FormLabel>
                       <FormControl>
                         <Input
                           className="glass-input"
@@ -103,7 +115,10 @@ const Register: React.FC = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel className="flex items-center">
+                        <AtSign className="mr-1 h-4 w-4 text-muted-foreground" />
+                        Email
+                      </FormLabel>
                       <FormControl>
                         <Input
                           className="glass-input"
@@ -121,7 +136,10 @@ const Register: React.FC = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel className="flex items-center">
+                        <Lock className="mr-1 h-4 w-4 text-muted-foreground" />
+                        Password
+                      </FormLabel>
                       <FormControl>
                         <Input
                           className="glass-input"
@@ -139,7 +157,10 @@ const Register: React.FC = () => {
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Confirm Password</FormLabel>
+                      <FormLabel className="flex items-center">
+                        <Lock className="mr-1 h-4 w-4 text-muted-foreground" />
+                        Confirm Password
+                      </FormLabel>
                       <FormControl>
                         <Input
                           className="glass-input"
@@ -152,26 +173,42 @@ const Register: React.FC = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full glass-button" disabled={isSubmitting}>
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Creating account...
-                    </>
-                  ) : (
-                    'Create Account'
-                  )}
-                </Button>
+                
+                <div className="pt-2">
+                  <Button type="submit" className="w-full glass-button" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Creating account...
+                      </>
+                    ) : (
+                      'Create Account'
+                    )}
+                  </Button>
+                </div>
               </form>
             </Form>
           </CardContent>
-          <CardFooter className="flex justify-center">
+          <CardFooter className="flex flex-col gap-4">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Already have an account?{' '}
               <Link to="/login" className="text-primary hover:underline font-medium">
                 Sign in
               </Link>
             </p>
+            
+            <div className="rounded-md bg-amber-50 dark:bg-amber-900/30 p-3 w-full">
+              <div className="flex items-center text-sm text-amber-800 dark:text-amber-300">
+                <div className="mr-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-amber-500">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                </div>
+                <p>Registration is currently for demonstration purposes only.</p>
+              </div>
+            </div>
           </CardFooter>
         </Card>
       </div>
