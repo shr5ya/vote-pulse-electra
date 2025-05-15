@@ -15,6 +15,7 @@ import Vote from "./pages/Vote";
 import Results from "./pages/Results";
 import NotFound from "./pages/NotFound";
 import AdminPanel from "./pages/AdminPanel";
+import Help from "./pages/Help";
 
 // Contexts
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -24,6 +25,13 @@ import { ElectionProvider } from "@/contexts/ElectionContext";
 // Auth protection wrapper
 import { useAuth } from "@/contexts/AuthContext";
 import { ReactNode } from "react";
+
+// Import new pages for routes
+import VotersPage from "./pages/Voters";
+import ElectionsPage from "./pages/Elections";
+import CandidatesPage from "./pages/Candidates";
+import ProfilePage from "./pages/Profile";
+import SettingsPage from "./pages/Settings";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -70,6 +78,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Index />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/help" element={<Help />} />
       
       {/* Protected Routes */}
       <Route path="/dashboard" element={
@@ -90,6 +99,36 @@ const AppRoutes = () => {
       <Route path="/results/:id" element={
         <ProtectedRoute>
           <Results />
+        </ProtectedRoute>
+      } />
+      <Route path="/voters" element={
+        <ProtectedRoute>
+          <VotersPage />
+        </ProtectedRoute>
+      } />
+      <Route path="/election" element={
+        <ProtectedRoute>
+          <ElectionsPage />
+        </ProtectedRoute>
+      } />
+      <Route path="/elections" element={
+        <ProtectedRoute>
+          <ElectionsPage />
+        </ProtectedRoute>
+      } />
+      <Route path="/candidates" element={
+        <ProtectedRoute>
+          <CandidatesPage />
+        </ProtectedRoute>
+      } />
+      <Route path="/profile" element={
+        <ProtectedRoute>
+          <ProfilePage />
+        </ProtectedRoute>
+      } />
+      <Route path="/settings" element={
+        <ProtectedRoute>
+          <SettingsPage />
         </ProtectedRoute>
       } />
 
