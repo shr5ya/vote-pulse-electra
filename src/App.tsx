@@ -25,7 +25,14 @@ import { ElectionProvider } from "@/contexts/ElectionContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { ReactNode } from "react";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
 
 // Protected route component
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {

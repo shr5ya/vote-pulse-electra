@@ -89,15 +89,27 @@ const Vote: React.FC = () => {
       toast.error('Please select a candidate to vote for.');
       return;
     }
+
+    if (!user) {
+      toast.error('You must be logged in to vote.');
+      return;
+    }
     
     setIsSubmitting(true);
     
+    // Submit vote with a slight delay to show loading state
     setTimeout(() => {
-      if (user && castVote(election.id, selectedCandidate, user.id)) {
+      const success = castVote(election.id, selectedCandidate, user.id);
+      
+      if (success) {
         setIsVoteComplete(true);
+        toast.success('Your vote has been cast successfully!');
+      } else {
+        toast.error('There was an error casting your vote. Please try again.');
       }
+      
       setIsSubmitting(false);
-    }, 1500); // Simulate network delay
+    }, 1500);
   };
   
   if (isVoteComplete) {

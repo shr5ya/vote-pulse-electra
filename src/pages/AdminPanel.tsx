@@ -19,10 +19,12 @@ import {
   Pie,
   Cell
 } from 'recharts';
+import ElectionsManagement from './admin/ElectionsManagement';
 
-// Admin sub-pages
+// Admin Dashboard sub-page
 const AdminDashboard = () => {
   const { elections, activeElections, completedElections, upcomingElections } = useElection();
+  const navigate = useNavigate();
   
   // Sample data for charts
   const electionStatusData = [
@@ -110,7 +112,6 @@ const AdminDashboard = () => {
                   outerRadius={100}
                   fill="#8884d8"
                   dataKey="value"
-                  nameKey="name"
                   label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                 >
                   {electionStatusData.map((entry, index) => (
@@ -183,7 +184,7 @@ const AdminDashboard = () => {
                       {Math.round((election.totalVotes / election.voterCount) * 100)}%
                     </td>
                     <td className="py-3">
-                      <Button variant="outline" size="sm">View</Button>
+                      <Button variant="outline" size="sm" onClick={() => navigate(`/elections/${election.id}`)}>View</Button>
                     </td>
                   </tr>
                 ))}
@@ -192,30 +193,14 @@ const AdminDashboard = () => {
           </div>
         </CardContent>
         <CardFooter className="border-t border-gray-200 dark:border-gray-700">
-          <Button variant="ghost" size="sm">View All Elections</Button>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/admin/elections')}>View All Elections</Button>
         </CardFooter>
       </Card>
     </AdminLayout>
   );
 };
 
-const AdminElections = () => {
-  return (
-    <AdminLayout title="Election Management" subtitle="Create and manage elections">
-      <Card className="glass-card">
-        <CardHeader>
-          <CardTitle>Election Management</CardTitle>
-          <CardDescription>Create and manage all elections</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {/* Election management content will go here */}
-          <p>Election management tools coming soon...</p>
-        </CardContent>
-      </Card>
-    </AdminLayout>
-  );
-};
-
+// Admin Voters component
 const AdminVoters = () => {
   return (
     <AdminLayout title="Voter Management" subtitle="Manage voter registration and access">
@@ -225,7 +210,6 @@ const AdminVoters = () => {
           <CardDescription>Manage voter registration and access</CardDescription>
         </CardHeader>
         <CardContent>
-          {/* Voter management content will go here */}
           <p>Voter management tools coming soon...</p>
         </CardContent>
       </Card>
@@ -233,6 +217,7 @@ const AdminVoters = () => {
   );
 };
 
+// Admin Settings component
 const AdminSettings = () => {
   return (
     <AdminLayout title="System Settings" subtitle="Configure your voting system">
@@ -242,7 +227,6 @@ const AdminSettings = () => {
           <CardDescription>Configure your voting system</CardDescription>
         </CardHeader>
         <CardContent>
-          {/* Settings content will go here */}
           <p>Settings tools coming soon...</p>
         </CardContent>
       </Card>
@@ -265,7 +249,7 @@ const AdminPanel: React.FC = () => {
   return (
     <Routes>
       <Route path="/dashboard" element={<AdminDashboard />} />
-      <Route path="/elections" element={<AdminElections />} />
+      <Route path="/elections" element={<ElectionsManagement />} />
       <Route path="/voters" element={<AdminVoters />} />
       <Route path="/settings" element={<AdminSettings />} />
     </Routes>

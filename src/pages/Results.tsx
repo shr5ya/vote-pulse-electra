@@ -243,7 +243,6 @@ const Results: React.FC = () => {
                         outerRadius={120}
                         fill="#8884d8"
                         dataKey="value"
-                        nameKey="name"
                         label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
                       >
                         {chartData.map((entry, index) => (
@@ -263,7 +262,7 @@ const Results: React.FC = () => {
                       <XAxis type="number" />
                       <YAxis dataKey="name" type="category" width={80} />
                       <Tooltip formatter={(value) => [`${value} votes`, 'Votes']} />
-                      <Bar dataKey="value" nameKey="name">
+                      <Bar dataKey="value">
                         {chartData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
@@ -335,8 +334,7 @@ const Results: React.FC = () => {
                       </div>
                       <Progress 
                         value={election.totalVotes > 0 ? (candidate.votes / election.totalVotes) * 100 : 0} 
-                        className={`h-2 ${index === 0 && hasWinner ? 'bg-yellow-100 dark:bg-yellow-900/30' : ''}`}
-                        indicatorClassName={index === 0 && hasWinner ? 'bg-yellow-500' : undefined}
+                        className={index === 0 && hasWinner ? 'bg-yellow-100 dark:bg-yellow-900/30' : ''}
                       />
                     </div>
                   </div>

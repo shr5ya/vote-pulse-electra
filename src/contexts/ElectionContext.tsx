@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from 'sonner';
 
 // Interfaces
@@ -22,6 +22,7 @@ export interface Election {
   candidates: Candidate[];
   totalVotes: number;
   voterCount: number;
+  createdBy?: string; // ID of the user who created the election
 }
 
 export interface Voter {
@@ -43,6 +44,10 @@ interface ElectionContextType {
   activeElections: Election[];
   completedElections: Election[];
   upcomingElections: Election[];
+  userCreatedElections: (userId: string) => Election[];
+  deleteElection: (electionId: string) => void;
+  updateElection: (electionId: string, updates: Partial<Election>) => void;
+  updateElectionStatus: () => void;
 }
 
 // Mock data
@@ -84,6 +89,7 @@ const mockElections: Election[] = [
     candidates: mockCandidates,
     totalVotes: 54,
     voterCount: 100,
+    createdBy: 'admin1',
   },
   {
     id: '2',
@@ -95,6 +101,7 @@ const mockElections: Election[] = [
     candidates: [],
     totalVotes: 0,
     voterCount: 50,
+    createdBy: 'admin1',
   },
   {
     id: '3',
@@ -123,6 +130,7 @@ const mockElections: Election[] = [
     ],
     totalVotes: 60,
     voterCount: 75,
+    createdBy: 'user1',
   },
 ];
 
@@ -147,10 +155,46 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [elections, setElections] = useState<Election[]>(mockElections);
   const [voters, setVoters] = useState<Voter[]>(mockVoters);
 
+  // Update election statuses based on current date
+  const updateElectionStatus = () => {
+    const now = new Date();
+    
+    setElections(prevElections => {
+      return prevElections.map(election => {
+        let status = election.status;
+        
+        if (election.startDate <= now && election.endDate >= now) {
+          status = 'active';
+        } else if (election.endDate < now) {
+          status = 'completed';
+        } else if (election.startDate > now) {
+          status = 'upcoming';
+        }
+        
+        if (status !== election.status) {
+          return { ...election, status };
+        }
+        return election;
+      });
+    });
+  };
+  
+  // Update election status every minute
+  useEffect(() => {
+    updateElectionStatus();
+    const interval = setInterval(updateElectionStatus, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Get elections by status
   const activeElections = elections.filter(election => election.status === 'active');
   const completedElections = elections.filter(election => election.status === 'completed');
   const upcomingElections = elections.filter(election => election.status === 'upcoming');
+  
+  // Get elections created by a specific user
+  const userCreatedElections = (userId: string) => {
+    return elections.filter(election => election.createdBy === userId);
+  };
 
   // Get a specific election
   const getElection = (id: string) => {
@@ -177,6 +221,25 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     
     setElections([...elections, newElection]);
     toast.success('Election created successfully!');
+  };
+
+  // Delete an election
+  const deleteElection = (electionId: string) => {
+    setElections(prevElections => prevElections.filter(election => election.id !== electionId));
+    toast.success('Election deleted successfully!');
+  };
+
+  // Update an election
+  const updateElection = (electionId: string, updates: Partial<Election>) => {
+    setElections(prevElections => {
+      return prevElections.map(election => {
+        if (election.id === electionId) {
+          return { ...election, ...updates };
+        }
+        return election;
+      });
+    });
+    toast.success('Election updated successfully!');
   };
 
   // Add a candidate to an election
@@ -217,7 +280,7 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const castVote = (electionId: string, candidateId: string, voterId: string): boolean => {
     // Check if the voter has already voted
     const voter = voters.find(v => v.id === voterId);
-    if (!voter || voter.hasVoted) {
+    if (!voter || (voter.hasVoted && voter.electionId === electionId)) {
       toast.error('You have already voted in this election.');
       return false;
     }
@@ -269,7 +332,11 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       getElection,
       activeElections,
       completedElections,
-      upcomingElections
+      upcomingElections,
+      userCreatedElections,
+      deleteElection,
+      updateElection,
+      updateElectionStatus
     }}>
       {children}
     </ElectionContext.Provider>

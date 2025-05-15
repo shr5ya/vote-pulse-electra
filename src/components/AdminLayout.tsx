@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, Users, Vote, BarChart2, Settings, 
   LogOut, ChevronRight, ChevronLeft, List 
@@ -23,23 +23,24 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
 }) => {
   const [collapsed, setCollapsed] = React.useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, logout } = useAuth();
 
   const navItems = [
     { 
       name: 'Dashboard', 
       icon: <LayoutDashboard className="h-5 w-5" />, 
-      path: '/dashboard' 
+      path: '/admin/dashboard'
     },
     { 
       name: 'Elections', 
       icon: <Vote className="h-5 w-5" />, 
-      path: '/elections'
+      path: '/admin/elections'
     },
     { 
       name: 'Voters', 
       icon: <Users className="h-5 w-5" />, 
-      path: '/voters'
+      path: '/admin/voters'
     },
     { 
       name: 'Results', 
@@ -49,13 +50,17 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     { 
       name: 'Settings', 
       icon: <Settings className="h-5 w-5" />, 
-      path: '/settings'
+      path: '/admin/settings'
     },
   ];
 
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  const isActive = (path: string) => {
+    return location.pathname === path || location.pathname.startsWith(path + '/');
   };
 
   return (
@@ -136,7 +141,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                     className={cn(
                       "w-full flex items-center justify-start py-2 px-4",
                       collapsed ? "justify-center" : "",
-                      window.location.pathname.includes(item.path) ? "bg-primary/10 text-primary" : ""
+                      isActive(item.path) ? "bg-primary/10 text-primary" : ""
                     )}
                     onClick={() => navigate(item.path)}
                   >
